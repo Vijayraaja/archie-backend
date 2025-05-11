@@ -2,17 +2,20 @@ from flask import Flask, request, jsonify
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import os
+import json
 
 app = Flask(__name__)
 
-# Set up Google Sheets API credentials
+# Load credentials from Render environment variable
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
-creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
+creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
+creds_dict = json.loads(creds_json)
+creds = ServiceAccountCredentials.from_json_keyfile_dict(creds_dict, scope)
 client = gspread.authorize(creds)
 
 @app.route('/')
 def home():
-    return "Archie is alive and connected!", 200
+    return "Archie is alive and connected to Google Sheets!", 200
 
 @app.route('/create_sheet', methods=['POST'])
 def create_sheet():
@@ -31,7 +34,6 @@ def create_sheet():
             "message": str(e)
         }), 500
 
-# === BIND TO 0.0.0.0 FOR RENDER ===
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
