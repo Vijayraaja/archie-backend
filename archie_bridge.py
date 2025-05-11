@@ -6,7 +6,7 @@ import json
 
 app = Flask(__name__)
 
-# Load credentials from Render environment variable
+# Load Google Sheets credentials from environment variable (Render-safe)
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
 creds_dict = json.loads(creds_json)
@@ -23,10 +23,16 @@ def create_sheet():
         data = request.get_json()
         sheet_title = data.get("title", "Untitled")
 
+        # Create sheet
         sheet = client.create(sheet_title)
+
+        # Share with your email for visibility and editing
+        sheet.share('vijayraajaarchie@gmail.com', perm_type='user', role='writer')
+
         return jsonify({
             "status": "success",
-            "sheet_id": sheet.id
+            "sheet_id": sheet.id,
+            "message": f"Sheet shared with vijayraajaarchie@gmail.com"
         }), 200
     except Exception as e:
         return jsonify({
