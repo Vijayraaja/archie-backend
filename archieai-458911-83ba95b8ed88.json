@@ -1,0 +1,13 @@
+{
+  "type": "service_account",
+  "project_id": "archieai-458911",
+  "private_key_id": "83ba95b8ed8830870c4080ef6bb5378c5f31f928",
+  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQC3QTM5F3nFTYK8\nE8eKXs7+2Tp2u/GtqYW3zoajBx4hyxELYg9ReOtrG0Fiy63/8201zMn3JAmClk+J\nK0wn3wZu/IlEVlYfa/w7k7Mf50WlegavLGQjAH+3+FpNq1QhtXM/kxoaU163LvFm\nf9mJEKlrnIPr6jWqVu4NROlmWVPUs1ih3AIbhUtInz6EuSODCvWsvUoKDIE+ejdf\n8tlnUH/8TJ3x7HpKYLjjDfB/BXZmOlDCbpmfqcunj+MCcwhGkraV9RQJLz4R3Hku\nrnfH4u4ygGhVCBceu7+RI3frSKDFktbxivzlkgPI74WTC3PPXuWPzZws0oDU9Mne\n3+WOGhMJAgMBAAECggEADBli72cMZCl88zv/FbSyyALBqGs6RrQFnyAkpYjnxWVp\n561+w2tPZ8/x3jsCbv68fCvcPdQESLnx4GWabpt8CkHkMj3dC9AOZESZNAcKAyXu\nYQx2RBVZWWUtWSlxsZQQWuc0dv6AJ2oTCChyzWjrNq6ryxy4lFmO+BNPsbE+JrHf\n9xyZSkGt09KPZmMs2RUdOMzVwSpmFr8JvIdOlZcwTUpvLw4m1KyO7fs83aME7bx/\nQlw1uQ8l3kL+vdVD8ibqiYh689wV3hqJdU8TKWoiAjFoSXgZHl7GxKlKP4BOxqTI\nLR99J4Izd+eQ0MreMoGcOwd28GXhyy2+PYIEFf/AjQKBgQDsdHn8jylwQt4Rq1cW\nXdeYh/tmY5q9In3mV/yPRHvuaI4DcCEkGUbVjGF6Qv+qdpu2CDa7UA6VNKn3EAWf\noJJsP0EQZiBfZlYc0t48xCDocPS9OXbiOvCTzw7QXLzkv0nVeWN7Cn3+H8YWGC6t\nPgY4dwAz4bashHRTFhgpY2dOpwKBgQDGZvmD7goWNyISWNiZ0hQMY//rORnz2HkB\nIIMmpOKJnvEpAK4Ou5RhNNKDUSaZTn4Qlt60Sf5Qz7vMEW23uabLaBifVbqySUoo\nimcRv7Pbfn0lHCLVBHVB6yL6OG4i6Z35mzLozNukCPIEE8Jjrv+mnDjovsiiYIDa\ndbMcbLv2zwKBgGt0t2cuTD+nM7JF8mrItMytp3MtesnPHfYLMEyPa965hyhK0dTM\n4+LyS+46+mMmSbcc3nqbdDUcXM1Za6TSXRhyWogwUS/pmuK4daSZ4PahNqezsLI4\n5NHXPD02l+VAhTZNVwc4im9tUyEBVl0Gnd8VPXNWdSTLgO2tUcelU/JrAoGBAKSU\ntXUwmKN3Fsd7diqbr0/cAGbDVnkGYNKDgugirV2WQN1PmBPWnS7J37tZLRjNmRvv\n20xZeSLWQCX3azmWQvvHHW3HcvkEfQUGUpvRl8SDuBJ5tZdZfF+zS6+f8hT6ELcH\nfILLtYPse77QGVgRyjcOrtK7uLmiLiGKs4rn1EDXAoGBAKOmbignykGkselZoPle\n5sv0pBr+EsOG+Gk+G6wg71eWkBHmWnjEY7M1iNPfkT+KBrJwwVZw6ShmSexzbV0B\nDtxGkiXJJpi5c8B0jKvd6hF4KvyXLIz1p8js24zU/3p01FIIVS1asL9yY3CjFwVT\neLlu8WzLzvQSHBolD99UZ9be\n-----END PRIVATE KEY-----\n",
+  "client_email": "archieserviceaccount@archieai-458911.iam.gserviceaccount.com",
+  "client_id": "118234317407838798116",
+  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
+  "token_uri": "https://oauth2.googleapis.com/token",
+  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
+  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/archieserviceaccount%40archieai-458911.iam.gserviceaccount.com",
+  "universe_domain": "googleapis.com"
+}
