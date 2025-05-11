@@ -1,70 +1,37 @@
 from flask import Flask, request, jsonify
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
-from googleapiclient.discovery import build
-from google.oauth2 import service_account as google_service_account
+import os
 
 app = Flask(__name__)
 
-# Google Sheets credentials for gspread
-scope = [
-    "https://spreadsheets.google.com/feeds",
-    "https://www.googleapis.com/auth/spreadsheets",
-    "https://www.googleapis.com/auth/drive.file",
-    "https://www.googleapis.com/auth/drive"
-]
-
-creds = ServiceAccountCredentials.from_json_keyfile_name('archieai-458911-83ba95b8ed88.json', scope)
+# Set up Google Sheets API credentials
+scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
+creds = ServiceAccountCredentials.from_json_keyfile_name('credentials.json', scope)
 client = gspread.authorize(creds)
 
-# Google Drive API credentials for sheet creation
-SCOPES = ['https://www.googleapis.com/auth/drive', 'https://www.googleapis.com/auth/spreadsheets']
-drive_creds = google_service_account.Credentials.from_service_account_file('archieai-458911-83ba95b8ed88.json', scopes=SCOPES)
-
-# Folder ID where new sheets will be created
-folder_id = '1gyrfUlkdceSxiqclDSPfxkWdgccPFG2p'
+@app.route('/')
+def home():
+    return "Archie is alive and connected!", 200
 
 @app.route('/create_sheet', methods=['POST'])
 def create_sheet():
-    data = request.json
-    sheet_title = data.get('title')
+    try:
+        data = request.get_json()
+        sheet_title = data.get("title", "Untitled")
 
-    service = build('drive', 'v3', credentials=drive_creds)
+        sheet = client.create(sheet_title)
+        return jsonify({
+            "status": "success",
+            "sheet_id": sheet.id
+        }), 200
+    except Exception as e:
+        return jsonify({
+            "status": "error",
+            "message": str(e)
+        }), 500
 
-    file_metadata = {
-        'name': sheet_title,
-        'mimeType': 'application/vnd.google-apps.spreadsheet',
-        'parents': [folder_id]
-    }
-
-    file = service.files().create(body=file_metadata, fields='id').execute()
-
-    return jsonify({"status": "success", "sheet_id": file.get('id')})
-
-@app.route('/add_row', methods=['POST'])
-def add_row():
-    data = request.json
-    sheet_name = data.get('sheet')
-    row = data.get('row')
-
-    sheet = client.open(sheet_name).sheet1
-    sheet.append_row(row)
-
-    return jsonify({"status": "success", "added": row})
-
-@app.route('/query_row', methods=['GET'])
-def query_row():
-    sheet_name = request.args.get('sheet')
-    keyword = request.args.get('keyword')
-
-    sheet = client.open(sheet_name).sheet1
-    records = sheet.get_all_records()
-
-    for i, record in enumerate(records):
-        if keyword in record.values():
-            return jsonify({"status": "found", "row_number": i + 2, "record": record})
-
-    return jsonify({"status": "not_found"})
-
+# === BIND TO 0.0.0.0 FOR RENDER ===
 if __name__ == '__main__':
-    app.run(port=5000)
+    port = int(os.environ.get("PORT", 10000))
+    app.run(host='0.0.0.0', port=port)
