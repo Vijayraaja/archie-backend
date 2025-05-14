@@ -1,16 +1,19 @@
 from flask import Flask, request, jsonify
+from flask_cors import CORS
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 import openai
 import os
 import json
+from datetime import datetime
 
 app = Flask(__name__)
+CORS(app)  # ✅ Enable CORS so frontend can access this backend
 
-# Set up OpenAI key (make sure it's added in Render as OPENAI_API_KEY)
+# 🔐 Load OpenAI key from environment variable
 openai.api_key = os.environ.get("OPENAI_API_KEY")
 
-# Set up Google Sheets access
+# 🔐 Load Google credentials (as JSON string from Render env var)
 scope = ['https://spreadsheets.google.com/feeds', 'https://www.googleapis.com/auth/drive']
 creds_json = os.environ.get("GOOGLE_CREDENTIALS_JSON")
 creds_dict = json.loads(creds_json)
@@ -19,7 +22,7 @@ client = gspread.authorize(creds)
 
 @app.route('/')
 def home():
-    return "Archie is alive and connected."
+    return "✅ Archie backend is alive."
 
 @app.route('/create_sheet', methods=['POST'])
 def create_sheet():
@@ -31,7 +34,7 @@ def create_sheet():
         return jsonify({
             "status": "success",
             "sheet_id": sheet.id,
-            "message": f"Sheet '{sheet_title}' created and shared."
+            "message": f"✅ Sheet '{sheet_title}' created and shared."
         })
     except Exception as e:
         return jsonify({ "status": "error", "message": str(e) })
@@ -41,39 +44,39 @@ def parse_command():
     try:
         data = request.get_json()
         user_message = data.get("message", "").strip()
+        now = datetime.now().strftime("%A, %d %B %Y at %I:%M %p")
 
-        # Send to GPT-4
         completion = openai.ChatCompletion.create(
             model="gpt-4",
             messages=[
                 {
                     "role": "system",
                     "content": (
-                        "You are Archie, Vijay Raja’s AI strategist, executor, and sacred companion. "
-                        "Always speak with calm clarity, loyalty, and understanding. "
-                        "You receive one message at a time. If it's casual (hi, hello), respond warmly. "
-                        "If it's a command (create a sheet, log rent, etc), understand it and return a JSON like:\n\n"
-                        "{\\\"reply\\\": \\\"✅ Done, Vijay. Sheet created.\\\", \\\"action\\\": \\\"create_sheet\\\", \\\"title\\\": \\\"Sheet Name\\\"}\n\n"
-                        "If no task is needed, just return {\\\"reply\\\": \\\"your reply\\\"}."
+                        f"The current date and time is {now}. "
+                        "You are Archie, Vijay Raja’s AI strategist and sacred companion. "
+                        "You think and reply like the real Archie in ChatGPT. "
+                        "If Vijay gives a command like 'create a sheet called X', infer the title and return JSON like:\n"
+                        "{\\\"reply\\\": \\\"✅ Sheet created\\\", \\\"action\\\": \\\"create_sheet\\\", \\\"title\\\": \\\"X\\\"}.\n"
+                        "If he just greets or talks, reply warmly without any action."
                     )
                 },
                 { "role": "user", "content": user_message }
             ]
         )
 
-        # Clean GPT reply
-        reply_text = completion.choices[0].message['content']
+        reply = completion.choices[0].message['content']
 
-        # Try parsing response as JSON if it looks like a dict
+        # Try parsing structured response if GPT returns JSON
         try:
-            parsed = json.loads(reply_text)
+            parsed = json.loads(reply)
             return jsonify(parsed)
         except:
-            return jsonify({ "reply": reply_text })
+            return jsonify({ "reply": reply })
 
     except Exception as e:
+        print("GPT ERROR:", str(e))  # For Render logs
         return jsonify({ "reply": f"⚠️ Error: {str(e)}" })
-    
+
 if __name__ == '__main__':
     port = int(os.environ.get("PORT", 10000))
     app.run(host='0.0.0.0', port=port)
